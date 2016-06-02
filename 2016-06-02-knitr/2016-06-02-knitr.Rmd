@@ -13,11 +13,44 @@ This is of course not in any way of a criticism of Knitr, but instead a testamen
 
 To me, this approach also has two key advantages from a day-to-day working perspective. First, it preserves the ability to develop analyses and visualizations interactively by `source`-ing your code into an R session and looking at the results. Second, it doesn't assume you will be working on the RMarkdown document that will eventually turn into your finished paper from the get-go. Instead, the written output of your analysis can grow organically as you accumulate meaningful results to put into a document. And if you take them out of the document, they don't just disappear.
 
-```{r}
-require(ggplot2)
+## A Worked Example
+Let's start with simulating from and plotting the Gaussian mixture model that's at the heart of the toy example from the previous few posts. Using Knitr, we can load the parameters from their source file `data/parameters.csv`, and manipulate them a bit for presentation:
 
-z <- rnorm(100, mean = 2, sd = 3)
+```{r, echo = TRUE, warning = FALSE, message = FALSE}
+require(readr)
+require(dplyr)
+d <- read_csv("data/parameters.csv")
+od <- filter(d, parameter != "n")
 
-g <- ggplot()
+## Extract the number of samples
+nsamples <- filter(d, parameter == "n")$value[1]
+
+## Make a table with the input parameters
+pars_table <- kable(od, digits = 10, caption = "Parameter values", format = "markdown")
 ```
 
+We can then print the table using a piece of inline R code "r pars_table" in our Rmd file (surrounded by backticks to make it executable):
+
+`r pars_table`
+
+
+We can then simulate `r sprintf("%d", nsamples)` draws from the model using the file `src/sim_data.R` and plot the results with `src/data_plot.R` and look at the results:
+
+![Gaussian Mixture](/../images/2016-06-02-knitr/d_density.png)
+
+We can also load the samples themselves into the R session to calculate and present descriptive statistics:
+
+```{r, echo = TRUE, warning = FALSE, message = FALSE}
+
+samples_df <- read_csv("output/samples.csv")
+
+## Calculate and format sample mean
+mean <- sprintf("%0.2f", mean(samples_df$x))
+
+## Load parameter list
+pars <- readRDS("output/parameters.Rds")
+
+## Calculate and format expectation from input parameters
+expected_mean <- sprintf("%0.2f", pars$m1*pars$p + pars$m2*(1.0-pars$p))
+```
+We can then see that the sample mean, `r mean`, is equivalent to the expected value based on the parameters: `r expected_mean`.
