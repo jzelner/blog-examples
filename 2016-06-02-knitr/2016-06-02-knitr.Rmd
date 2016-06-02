@@ -39,6 +39,7 @@ We can then print the table using a piece of inline R code "r pars_table" in our
 
 `r pars_table`
 
+(A quick guide to reading the table: `m1` and `m2` refer to the means of the two mixture components, and `sd1` and `sd2` refer to their respective standard deviations. The parameter `p` is the mixing parameter, i.e the proportion of samples drawn from the first component.)
 
 We can then simulate `r sprintf("%d", nsamples)` draws from the model using the file `src/sim_data.R` and plot the results with `src/data_plot.R` and look at the results:
 
