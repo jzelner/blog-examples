@@ -1,0 +1,23 @@
+---
+layout: post
+title:  "Knotes on Knitr"
+date: 2016-06-02
+categories: knitr R reproducibility
+published: TRUE
+---
+Knitr is a truly indispensible part of any R-based workflow with an emphasis on reproducibility. Before I started using Knitr, too much of my time was spent hand-copying results from R into Excel spreadsheets or LaTeX tables. Aside from being an excrutiating waste of time, this is an inherently error-prone undertaking. And it is one of those critical sources of friction that can make it agonizing to contemplate making changes to an analysis.
+
+But my experiences with Knitr have not been all sunshine and happy days. My early use of Knitr served largely to reproduce only the sins of the past: I found myself loading my RMarkdown files with tons of code that made them as slow to run and hard to debug as the monolithic R scripts I had been used to writing.
+
+This is of course not in any way of a criticism of Knitr, but instead a testament to its power and versatility. For short, automatically-generated reports, putting all of your model code into an RMarkdown file and running it through Knitr may be exactly what you want to do. But for more involved analyses, and especially those with computationally intensive or slow-running components (e.g., MCMC), an approach in which each component part has its own R script, and the dependencies between these are coordinated using a [makefile]({% post_url 2016-06-01-makefiles %}) may be the best bet. In this workflow, Knitr's considerable powers are used sparingly, specifically to embed parameter estimates and tables in the text, with most or all analysis and plotting confined to external scripts.
+
+To me, this approach also has two key advantages from a day-to-day working perspective. First, it preserves the ability to develop analyses and visualizations interactively by `source`-ing your code into an R session and looking at the results. Second, it doesn't assume you will be working on the RMarkdown document that will eventually turn into your finished paper from the get-go. Instead, the written output of your analysis can grow organically as you accumulate meaningful results to put into a document. And if you take them out of the document, they don't just disappear.
+
+```{r}
+require(ggplot2)
+
+z <- rnorm(100, mean = 2, sd = 3)
+
+g <- ggplot()
+```
+
