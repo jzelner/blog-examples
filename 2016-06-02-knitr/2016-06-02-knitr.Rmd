@@ -53,4 +53,5 @@ pars <- readRDS("output/parameters.Rds")
 ## Calculate and format expectation from input parameters
 expected_mean <- sprintf("%0.2f", pars$m1*pars$p + pars$m2*(1.0-pars$p))
 ```
-We can then see that the sample mean, `r mean`, is equivalent to the expected value based on the parameters: `r expected_mean`.
+
+We can then see that the sample mean, `r mean`, is nearly equivalent to the expected value based on the parameters: `r expected_mean`.

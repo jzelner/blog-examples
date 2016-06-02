@@ -27,7 +27,7 @@ output/figures/d_density.png : src/data_figure.R output/samples.csv
 	./$< -o output/figures -d $(word 2, $^)
 
 
-../../jz-home/_posts/2016-06-02-knitr.md : 2016-06-02-knitr.Rmd
+../../jz-home/_posts/2016-06-02-knitr.md : 2016-06-02-knitr.Rmd data/parameters.csv output/*.* output/figures/*.* 
 	@echo ----Translating RMD to Markdown ----
 	Rscript \
 		-e "require(knitr)" \
